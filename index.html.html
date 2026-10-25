@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>هەلگرتنا پارەی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9f3ee;--card:#fbfdfc;--ink:#14231b;--mute:#5d7367;--green:#0f5132;--gold:#e0a526;--gold2:#f3c54f;--red:#b8472f;--line:#cfe0d6}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;line-height:1.7}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px}
+h1{font-size:22px;margin:0}
+h2{font-size:16px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:8px}
+label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+input,select,button{font-family:inherit;font-size:16px}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.btn{border:0;border-radius:12px;padding:12px 16px;background:var(--green);color:#fff;font-weight:600;cursor:pointer;width:100%;margin-top:14px}
+.btn.ghost{background:transparent;color:var(--green);border:1px solid var(--green)}
+.btn.sm{width:auto;margin:0;padding:7px 12px;font-size:14px}
+.link{background:none;border:0;color:var(--green);cursor:pointer;text-decoration:underline;padding:6px}
+.err{color:var(--red);font-size:14px;margin-top:10px;min-height:20px}
+.hide{display:none!important}
+.hero{display:flex;gap:18px;align-items:center}
+.jar{width:96px;height:150px;border:3px solid var(--green);border-radius:14px 14px 30px 30px;position:relative;overflow:hidden;background:#fff;flex:none}
+.jar::before{content:"";position:absolute;top:-3px;left:14px;right:14px;height:8px;background:var(--green);border-radius:0 0 6px 6px}
+.fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(var(--gold2),var(--gold));height:0;transition:height .8s ease}
+.pct{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:22px;color:var(--ink)}
+.big{font-size:28px;font-weight:800;line-height:1.2}
+.sub{color:var(--mute);font-size:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.stat{background:var(--bg);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:17px}
+.tabs{display:flex;gap:8px;margin-bottom:6px}
+.tabs button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:14px}
+.tabs button.on{background:var(--green);color:#fff;border-color:var(--green)}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:8px}
+.item:last-child{border:0}
+.item .x{background:none;border:0;color:var(--red);cursor:pointer;font-size:14px}
+.note{background:#fff7e0;border-radius:12px;padding:10px 12px;font-size:14px;margin-top:14px}
+.seg{display:inline-flex;border:1px solid var(--green);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:#fff;color:var(--green);padding:6px 14px;cursor:pointer;font-size:14px}
+.seg button.on{background:var(--green);color:#fff}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- چوونەژوور -->
+<section id="authView" class="hide">
+  <div class="card" style="margin-top:40px">
+    <h1>هەلگرتنا پارەی</h1>
+    <p class="sub">بۆ دەستپێکرنێ هەژمارەکێ چێبکە یان بچە ژوور.</p>
+    <label for="email">ئیمەیل</label>
+    <input id="email" type="email" autocomplete="email" dir="ltr">
+    <label for="pass">پاسوۆرد</label>
+    <input id="pass" type="password" autocomplete="current-password" dir="ltr">
+    <button class="btn" id="loginBtn">چوونە ژوور</button>
+    <button class="btn ghost" id="signupBtn">چێکرنا هەژمارەکێ نوی</button>
+    <div class="err" id="authErr"></div>
+  </div>
+</section>
+
+<!-- ئەپ -->
+<section id="appView" class="hide">
+  <div class="top">
+    <h1>هەلگرتنا پارەی</h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="seg" id="dispSeg"><button data-c="USD" class="on">$</button><button data-c="IQD">دینار</button></div>
+      <button class="link" id="logoutBtn">دەرکەفتن</button>
+    </div>
+  </div>
+
+  <!-- ئارمانج نەهاتییە دانان -->
+  <div class="card hide" id="emptyCard">
+    <h2>ئارمانجا خۆ دیار بکە</h2>
+    <p class="sub">بڕێ پارەی و ماوەیێ دیار بکە، پاشی تو دشێی هەر دەمەکێ پارە زێدە بکەی.</p>
+    <button class="btn" id="openGoal">دانانا ئارمانجێ</button>
+  </div>
+
+  <!-- پێشاندان -->
+  <div class="card hide" id="mainCard">
+    <div class="hero">
+      <div class="jar"><div class="fill" id="fill"></div><div class="pct" id="pct">٠٪</div></div>
+      <div>
+        <div class="sub">هەلگیرایێ</div>
+        <div class="big" id="savedBig">0</div>
+        <div class="sub">ژ <span id="targetTxt"></span></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="sub">ماوی</span><b id="remain"></b></div>
+      <div class="stat"><span class="sub">ڕۆژێن ماین</span><b id="daysLeft"></b></div>
+      <div class="stat" style="grid-column:span 2"><span class="sub">بۆ گەهشتنێ، ڕۆژانە نێزیکی</span><b id="perDay"></b></div>
+    </div>
+    <div class="note" id="flexNote">ئەگەر ڕۆژەکێ پارە نەهەلگری ئاسایە. بڕێ ڕۆژانە خۆ ب خۆ دگوهۆڕیت ل سەر ڕۆژێن ماین.</div>
+    <button class="btn ghost" id="editGoal">گوهارتنا ئارمانجێ</button>
+  </div>
+
+  <!-- زێدەکرنا پارەی -->
+  <div class="card hide" id="addCard">
+    <h2>زێدەکرنا پارەی</h2>
+    <div class="row">
+      <div><label for="amt">بڕ</label><input id="amt" type="number" inputmode="decimal" min="0" step="any" dir="ltr"></div>
+      <div><label for="cur">دراڤ</label><select id="cur"><option value="USD">دولار</option><option value="IQD">دینار</option></select></div>
+    </div>
+    <label for="dt">ڕێکەفت</label>
+    <input id="dt" type="date" dir="ltr">
+    <button class="btn" id="addBtn">هەلگرتن</button>
+    <div class="err" id="addErr"></div>
+  </div>
+
+  <!-- لیست -->
+  <div class="card hide" id="listCard">
+    <h2>تۆمارێن هەلگرتنێ</h2>
+    <div id="list"></div>
+  </div>
+
+  <!-- ڕێکخستنا ئارمانجێ -->
+  <div class="card hide" id="goalCard">
+    <h2>ئارمانج و ڕێژا گوهۆڕینێ</h2>
+    <div class="row">
+      <div><label for="gAmt">بڕێ ئارمانجێ</label><input id="gAmt" type="number" inputmode="decimal" min="0" step="any" dir="ltr"></div>
+      <div><label for="gCur">دراڤ</label><select id="gCur"><option value="USD">دولار</option><option value="IQD">دینار</option></select></div>
+    </div>
+    <label>ماوە چاوا دیار بکەی؟</label>
+    <div class="tabs"><button id="tDays" class="on" type="button">ژمارا ڕۆژان</button><button id="tDate" type="button">ڕێکەفتا دوماهیێ</button></div>
+    <div id="byDays"><input id="gDays" type="number" inputmode="numeric" min="1" placeholder="مەسەلەن ٣٠" dir="ltr"></div>
+    <div id="byDate" class="hide"><input id="gEnd" type="date" dir="ltr"></div>
+    <label for="gRate">ڕێژە: ١ دولار چەند دینارە؟</label>
+    <input id="gRate" type="number" inputmode="decimal" min="1" step="any" dir="ltr">
+    <button class="btn" id="saveGoal">پاراستن</button>
+    <button class="btn ghost" id="cancelGoal">پاشگەزبوون</button>
+    <div class="err" id="goalErr"></div>
+  </div>
+</section>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ===== لێرە زانیارییێن Firebase یا خۆ دانە ===== */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  appId: "YOUR_APP_ID"
+};
+/* ================================================= */
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+const showEl = (id, on) => $(id).classList.toggle('hide', !on);
+
+let user = null, settings = null, deposits = [], disp = 'USD', mode = 'days', unsubs = [];
+
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+const dayMs = 86400000;
+const parse = s => new Date(s + 'T00:00:00');
+const rate = () => (settings && settings.rate) || 1500;
+const conv = (v, from, to) => from === to ? v : (from === 'USD' ? v * rate() : v / rate());
+const fmt = (v, c) => c === 'USD'
+  ? '$' + v.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  : Math.round(v).toLocaleString('en-US') + ' دینار';
+const ar = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+/* ---- چوونەژوور ---- */
+const authErrors = {
+  'auth/invalid-email': 'ئیمەیل دروست نینە.',
+  'auth/missing-password': 'پاسوۆردی بنڤێسە.',
+  'auth/weak-password': 'پاسوۆرد دڤێت لانی کێم ٦ پیت بیت.',
+  'auth/email-already-in-use': 'ڤی ئیمەیلی هەژمار هەیە، بچە ژوور.',
+  'auth/invalid-credential': 'ئیمەیل یان پاسوۆرد خەلەتە.',
+  'auth/network-request-failed': 'ئینتەرنێت نینە.'
+};
+const authRun = fn => async () => {
+  $('authErr').textContent = '';
+  try { await fn(auth, $('email').value.trim(), $('pass').value); }
+  catch (e) { $('authErr').textContent = authErrors[e.code] || 'خەلەتیەک چێبوو، دووبارە هەول بدە.'; }
+};
+$('loginBtn').onclick = authRun(signInWithEmailAndPassword);
+$('signupBtn').onclick = authRun(createUserWithEmailAndPassword);
+$('logoutBtn').onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, u => {
+  unsubs.forEach(f => f()); unsubs = [];
+  user = u; settings = null; deposits = [];
+  showEl('authView', !u); showEl('appView', !!u);
+  if (!u) return;
+  $('dt').value = today();
+  unsubs.push(onSnapshot(doc(db, 'users', u.uid), s => { settings = s.exists() ? s.data() : null; render(); }));
+  unsubs.push(onSnapshot(query(collection(db, 'users', u.uid, 'deposits'), orderBy('date', 'desc')),
+    s => { deposits = s.docs.map(d => ({ id: d.id, ...d.data() })); render(); }));
+});
+
+/* ---- پیشاندان ---- */
+function render() {
+  if (!user) return;
+  const has = settings && settings.goalAmount;
+  const editing = !$('goalCard').classList.contains('hide');
+  showEl('emptyCard', !has && !editing);
+  showEl('mainCard', !!has && !editing);
+  showEl('addCard', !!has && !editing);
+  showEl('listCard', !!has && !editing);
+  document.querySelectorAll('#dispSeg button').forEach(b => b.classList.toggle('on', b.dataset.c === disp));
+  if (!has) return;
+
+  const gc = settings.goalCurrency;
+  const saved = deposits.reduce((a, d) => a + conv(d.amount, d.currency, gc), 0);
+  const target = settings.goalAmount;
+  const remain = Math.max(target - saved, 0);
+  const pct = Math.min(100, target ? (saved / target) * 100 : 0);
+  const left = Math.max(Math.floor((parse(settings.endDate) - parse(today())) / dayMs) + 1, 0);
+  const perDay = left > 0 ? remain / left : remain;
+
+  $('fill').style.height = pct + '%';
+  $('pct').textContent = ar(Math.floor(pct)) + '٪';
+  $('savedBig').textContent = fmt(conv(saved, gc, disp), disp);
+  $('targetTxt').textContent = fmt(conv(target, gc, disp), disp);
+  $('remain').textContent = fmt(conv(remain, gc, disp), disp);
+  $('daysLeft').textContent = left > 0 ? ar(left) + ' ڕۆژ' : 'ماوە ب دوماهی هات';
+  $('perDay').textContent = remain <= 0 ? 'گەهشتییە ئارمانجێ 🎉' : fmt(conv(perDay, gc, disp), disp);
+  $('flexNote').classList.toggle('hide', remain <= 0 || left === 0);
+
+  $('list').innerHTML = deposits.length ? '' : '<p class="sub">هێشتا چ تۆمار نینن.</p>';
+  deposits.forEach(d => {
+    const other = d.currency === 'USD' ? 'IQD' : 'USD';
+    const el = document.createElement('div');
+    el.className = 'item';
+    el.innerHTML = '<div><b></b><div class="sub"></div></div><button class="x">سڕینەوە</button>';
+    el.querySelector('b').textContent = fmt(d.amount, d.currency);
+    el.querySelector('.sub').textContent = d.date + '  •  ' + fmt(conv(d.amount, d.currency, other), other);
+    el.querySelector('.x').onclick = () => { if (confirm('ئەڤ تۆمارە بهێتە سڕینەوە؟')) deleteDoc(doc(db, 'users', user.uid, 'deposits', d.id)); };
+    $('list').appendChild(el);
+  });
+}
+document.querySelectorAll('#dispSeg button').forEach(b => b.onclick = () => { disp = b.dataset.c; render(); });
+
+/* ---- زێدەکرنا پارەی ---- */
+$('addBtn').onclick = async () => {
+  const amount = parseFloat($('amt').value);
+  $('addErr').textContent = '';
+  if (!(amount > 0)) { $('addErr').textContent = 'بڕەکێ دروست بنڤێسە.'; return; }
+  try {
+    await addDoc(collection(db, 'users', user.uid, 'deposits'), { amount, currency: $('cur').value, date: $('dt').value || today() });
+    $('amt').value = '';
+  } catch { $('addErr').textContent = 'نەهاتە پاراستن، دووبارە هەول بدە.'; }
+};
+
+/* ---- ئارمانج ---- */
+function setMode(m) {
+  mode = m;
+  $('tDays').classList.toggle('on', m === 'days'); $('tDate').classList.toggle('on', m === 'date');
+  showEl('byDays', m === 'days'); showEl('byDate', m === 'date');
+}
+$('tDays').onclick = () => setMode('days');
+$('tDate').onclick = () => setMode('date');
+function openGoal() {
+  showEl('emptyCard', false); showEl('mainCard', false); showEl('addCard', false); showEl('listCard', false);
+  showEl('goalCard', true); $('goalErr').textContent = '';
+  if (settings) {
+    $('gAmt').value = settings.goalAmount; $('gCur').value = settings.goalCurrency;
+    $('gRate').value = settings.rate; $('gEnd').value = settings.endDate;
+    $('gDays').value = Math.max(Math.round((parse(settings.endDate) - parse(settings.startDate)) / dayMs) + 1, 1);
+  } else { $('gRate').value = 1500; }
+}
+$('openGoal').onclick = openGoal;
+$('editGoal').onclick = openGoal;
+$('cancelGoal').onclick = () => { showEl('goalCard', false); render(); };
+$('saveGoal').onclick = async () => {
+  const goalAmount = parseFloat($('gAmt').value), r = parseFloat($('gRate').value);
+  const startDate = settings ? settings.startDate : today();
+  let endDate;
+  if (mode === 'days') {
+    const n = parseInt($('gDays').value, 10);
+    if (!(n > 0)) { $('goalErr').textContent = 'ژمارا ڕۆژان بنڤێسە.'; return; }
+    const e = parse(startDate); e.setDate(e.getDate() + n - 1);
+    endDate = e.getFullYear() + '-' + String(e.getMonth() + 1).padStart(2, '0') + '-' + String(e.getDate()).padStart(2, '0');
+  } else {
+    endDate = $('gEnd').value;
+    if (!endDate || parse(endDate) < parse(today())) { $('goalErr').textContent = 'ڕێکەفتەکا پاشەڕۆژێ هەلبژێرە.'; return; }
+  }
+  if (!(goalAmount > 0)) { $('goalErr').textContent = 'بڕێ ئارمانجێ بنڤێسە.'; return; }
+  if (!(r > 0)) { $('goalErr').textContent = 'ڕێژا گوهۆڕینێ بنڤێسە.'; return; }
+  try {
+    await setDoc(doc(db, 'users', user.uid), { goalAmount, goalCurrency: $('gCur').value, rate: r, startDate, endDate });
+    showEl('goalCard', false);
+  } catch { $('goalErr').textContent = 'نەهاتە پاراستن، دووبارە هەول بدە.'; }
+};
+</script>
+</body>
+</html>
